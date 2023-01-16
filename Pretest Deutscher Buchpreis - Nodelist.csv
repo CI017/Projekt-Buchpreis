@@ -1,0 +1,23 @@
+id,name,type,sex,year,genre,topic
+dbp,Deutscher Buchpreis,2,NA,NA,NA,NA
+blutbuch,Blutbuch,3,NA,2022,Roman,Gender
+dumont,DuMont Buchverlag,1,NA,,NA,NA
+kh,Kim de l'Horizon,4,3,,NA,Gender
+jps,Literaturpreis der Jürgen-Ponto-Stiftung,2,NA,2022,NA,NA
+sbp,Schweizer Buchpreis,2,NA,2022,NA,NA
+mutter,Lügen über meine Mutter,3,NA,2022,Roman/Biografische Fiktion,Feminismus/Familiengeschichte
+dd,Daniela Dröscher,4,1,,NA,NA
+kiwi,Kiepenheuer & Witsch,1,NA,,NA,NA
+spitzweg,Spitzweg,3,NA,2022,Roman/Komödie,Kunst
+en,Eckhart Nickel,4,2,,NA,NA
+piper,Piper Verlag,1,NA,,NA,NA
+nebenan,Nebenan,3,NA,2022,Roman,Beziehungen
+kb,Kristine Bilkau,4,1,,NA,NA
+luchterhand,Luchterhand Verlag,1,NA,,NA,NA
+dschinns,Dschinns,3,NA,2022,Roman,Familiengeschichte/Identität/Migration
+fa,Fatma Aydemir,4,1,,NA,Feminismus
+chv,Carl Hanser Verlag,1,NA,,NA,NA
+rgp,Robert Gernhardt Preis,2,NA,2020,NA,NA
+trottel,Trottel,3,NA,2022,Roman/Biografische Fiktion,Ostblock-Diktatur/Kommunismus/Traumabewältigung
+jf,Jan Faktor,4,2,NA,NA,Untergrund-Literaturszene Ost-Berlin
+wrlp,Wilhelm-Raabe-Literaturpreis,2,NA,NA,NA,NA
