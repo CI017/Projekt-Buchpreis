@@ -1,0 +1,110 @@
+EDGE-Attribute
+
+id
+Entspricht der ID in der Nodelist. Keine Sonderzeichen. Kleinbuchstaben.
+
+from
+Knoten 1 der Beziehung
+
+to
+Knoten 2 der Beziehung
+
+relation
+"Beziehungsart zwischen den Autor*innen, Büchern, Verlagen und Preisen; ungerichtet"
+1 = nominiert
+2 = gewonnen
+3 = veröffentlicht
+4 = Deutschen Buchpreis gewonnen
+
+year
+Jahr der Shortlist
+Jahr des Sieges
+Jahr der Veröffentlichung durch den Verlag
+
+NODE-Attribute
+
+id
+Identische ID wie aus der Edgelist zur Identifikation der Knoten.
+
+"Bücher: Schlagwort aus dem Titel, auf Dopplungen achten"
+Autor*innen: Zwei erste Buchstaben des Vor- und Nachnamen
+"Verlage: Name ausschreiben (z.B. piper), bzw. gängiger Name (Carl Hanser = hanser), bei Doppelnamen erster Name ausgeschrieben (z.B.: Kiepenheuer und Witsch = kiepenheuer)"
+"Preise: Kürzel -> Literaturpreis = p, Buchpreis = bp, ansonsten die Anfangsbuchstaben der enthaltenen Wörter (z. B. Literaturpreis der Jürgen-Ponto-Stiftung = pjps, Robert-Gernhard-Preis = rgp)"
+
+name
+numerische ID
+
+type
+1= Verlag
+2 = Preis
+3 = Buch Shortlist
+4 = Autor*in
+5 = Förderpreis (inkl. Stadtschreiber) 
+6 = Stipendium 
+7 = Buch Gewinner
+8 = Autor*in Gewinner
+
+sex
+1 = weiblich
+2 = männlich
+3 = divers
+
+year
+"Jahr, in dem das Buch auf der Shortlist des Deutschen Buchpreises stand"
+"Jahr, in dem ein Preis gewonnen wurden"
+"Jahr, in dem der Autor den Deutschen Buchpreis gewonnen hat"
+
+genre
+Familienroman
+Reiseroman
+Historischer Roman
+Gesellschaftsroman
+Liebesroman
+Komödie
+Entwicklungsroman
+Science-Fiction
+Fantasy
+Krimi
+Thriller
+Horror
+Epos
+Theaterroman
+Abenteuerroman
+
+
+thema
+"gesellschaftliches/politisches Thema, dass mit Buch/Autor zusammenhängt, z. B.:"
+Feminismus
+Rassismus
+Familie
+Kommunismus
+Identität
+Migration
+Ostblock-Diktatur
+Traumabewältigung
+Deutsch-französische Geschichte
+
+Wichtig
+Das Netzwerk ist ungerichtet.
+
+"Uns interessieren andere Literaturpreise nur, wenn der Autor bzw. das Buch diesen Preis gewonnen hat. Buchpreises stehen."
+"Nominierungen sind irrelevant, genau wie andere Buchtitel des Autors, die nicht auf der Shortlist des Deutschen"
+Beispiele:
+
+1. Autor A gewinnt den Deutschen Buchpreis mit Buch B im Jahr X.
+"A,B,2,X"
+
+2. Autor A gewinnt für Buch B noch Preis P in Jahr J
+"from,to,relation,year"
+"B,P,2,J"
+
+3. Autor A gewinnt für anderes Buch C dein Preis R in Jahr Y (das Buch C taucht NICHT auf)
+"from,to,relation,year"
+"A,R,2,Y"
+
+Unsere Kanten
+Autor -> Buch (Shortlist)
+Autor -> Buchpreis anderes Buch
+Buch (Shortlist) -> Verlag
+Buch (Shortlist) -> anderer Buchpreis
+"Autor -> andere Buchpreis, auch wenn es ein Shortlist- oder Gewinnerbuch ist"
