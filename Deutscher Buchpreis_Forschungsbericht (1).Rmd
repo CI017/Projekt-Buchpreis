@@ -1,0 +1,1425 @@
+---
+title: "226305 Forschungsbericht"
+author: "Von Stefanie Binder, Canan Edemir, Celine Imensek, Allegra Knobloch, Lina Krauß"
+date: "05/02/2023"
+output: 
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+  html_document: 
+    df_print: paged
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+  word_document:
+    toc: yes
+    toc_depth: '3'
+subtitle: Eine Netzwerkanalyse des Deutschen Buchpreises
+---
+
+```{r setup, include=FALSE}
+
+library(rmarkdown)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+__Abstract und Keywords__
+
+Wir analysieren das Beziehungsnetzwerk innerhalb eines ungerichteten Netzwerks von Büchern, die auf der Shortlist der Nominierung für den Deutschen Buchpreis von 2005 bis 2022 stehen. Die Beziehungsdimensionen umfassen ein Nominierungs- und Gewinner-Netzwerk. Ergänzend wurde die Verlagszugehörigkeit in einer Beziehungsdimension erhoben. Die Forschungsfrage bezieht sich auf den Matthäus-Effekt und ob dieser nach der Nominierung oder in der Vergabe des Deutschen Buchpreises auftritt. Die Analyse zeigt, dass der Matthäus-Effekt nicht im Anschluss an den Deutschen Buchpreis auftritt. Es besteht die Annahme, dass im Voraus ein Matthäus-Effekt besteht, da besonders Bücher auf der Shortlist platziert sind, die vor der Nominierung bereits eine Vielzahl an Preisen erhalten haben. 
+
+Keywords: Netzwerkanalyse, Deutscher Buchpreis, Matthäus-Effekt, Autoren, Literatur, Nominierung, Allstars
+
+# Einleitung 
+
+Wir untersuchen die Preisvergabe in der Literaturbranche, ausgehend vom Deutschen Buchpreis. Der Deutsche Buchpreis wird seit 2005 von der Stiftung Buchkultur und der Leseförderung des Börsenvereins des Deutschen Buchhandels ausgezeichnet. Die Verleihung findet jährlich auf der Frankfurter Buchmesse statt und das Gewinnerbuch wird als “Bester deutschsprachiger Roman des Jahres” bezeichnet. Verlage können sich direkt mit ihren Titeln um die Auszeichnung bewerben. Der Preis ist mit 25.000 Euro dotiert und die Nominierten erhalten 2.500 Euro. Für unsere Netzwerkanalyse haben wir uns für den Deutschen Buchpreis entschieden, weil er als der wirkmächtigste Literaturpreis im deutschsprachigen Raum angesehen wird. Laut eigener Aussage stehe der Preis für eine garantiert unabhängige und kompetente Preisträgerermittlung, was durch eine jährlich wechselnde Jury gesichert sein soll. Gleichzeitig ist der Deutsche Buchpreis auch vielfach kritisiert, so wird er beispielsweise als Marketingpreis bezeichnet. 
+
+Bei der Netzwerkanalyse interessiert uns, ob es bei der Nominierung oder Vergabe des Deutschen Buchpreises zu einem Matthäus-Effekt kommt. Für das Netzwerk haben wir die Nominierten sowie die Gewinnerinnen und Gewinner des Deutschen Buchpreises seit 2005 erfasst. Berücksichtigt wurde bei der Datenerhebung alle gewonnen Buch- und Literaturpreise, das Geschlecht und die Herkunft der Autorinnen und Autoren. Bei den Büchern haben wir das Genre, das Thema und das Erscheinungsjahr erhoben. 
+
+Der Matthäus-Effekt beschreibt nach Robert Merton in Anlehnung an das Matthäus-Evangelium den Mechanismus, bei dem Unterschiede von zum Beispiel Personen noch größer werden. Als Beispiel aus der Wissenschaft diente die Zitation von populären Wissenschaftlerinnen und Wissenschaftlern. Es wird also denen, die viel haben, noch mehr gegeben (Merton, 1968 nach Fuhse, 2018). 
+
+## Forschungsfrage
+
+Lässt sich in der Nominierung und Vergabe des Deutschen Buchpreises der Matthäus-Effekt erkennen?
+
+
+# Vorarbeiten und vergleichbare Studien
+## Forschungsstand
+
+Der Deutsche Buchpreis hat sich seit seiner Gründung eine mächtige Position in der deutschsprachigen Buchbranche aufgebaut. Obwohl der Preis erst seit 2005 verliehen wird, steht er auf einer Stufe mit dem ebenso renommierten Georg-Büchner-Preis (erste Verleihung: 1951). In ihrer Fallstudie untersucht Sandra Vlasta die Machtstrukturen der Aufmerksamkeitsökonomie, die hinter der Verleihung des Preises stecken.  Laut Vlasta (2016) ist dies vor allem darauf zurückzuführen, dass die Generierung von Aufmerksamkeit ein konkretes Ziel des Deutschen Buchpreis ist und daher bereits bei der Planung und Organisation mitgedacht wird. Zudem bietet der Börsenverein, der den Preis ins Leben gerufen hat, den größtmöglichen Anknüpfungspunkt an alle Akteure der Literaturbranche – von Verlagen über Autorinnen und Autoren bishin zu Literaturkritikerinnen und -kritikern. Diese Vermarktungsstrategien sind ein häufig genannter Kritikpunkt an diesem Literaturpreis. An dieser Fallstudie wird die Bedeutung des Deutschen Buchpreis deutlich, da er den Gewinnern nicht nur ein ökonomisches Kapital gewährt, sondern allen Autorinnen und Autoren auf der Shortlist und der Longlist zu einem symbolischen Kapital – der Aufmerksamkeit – verhilft (Vlasta, 2016, S. 21). Das begründet auch die Forschungsfrage dieses Datenprojekts, ob der Buchpreis als Startschuss oder auch als großes Finale der wichtigen, deutschsprachigen Literaturpreise fungiert.
+
+## Arbeitshypothesen 
+
+In unserem Forschungsprojekt gehen wir von folgenden Arbeitshypothesen aus:
+
+a) Es gibt bestimmte Preise die ausschlaggebend für die Nominierung des Deutschen Buchpreises sind
+
+b) Gewinnerinnen und Gewinner des Deutschen Buchpreises gewinnen danach besonders häufig den Schweizer Buchpreis
+
+c) Gewinnerinnen und Gewinner des Deutschen Buchpreises haben vorher Preis XY gewonnen
+
+d) Gewinnerinnen und Gewinner des Deutschen Buchpreises haben danach Preis XY gewonnen
+
+e) Der Autor oder die Autorin mit den meisten Preisen wurde auch mit dem Deutschen Buchpreis ausgezeichnet
+
+f) Nach der Nominierung bzw. der Vergabe des Deutschen Buchpreises lässt sich ein Matthäus-Effekt erkennen
+
+Die Analyse hat einen überwiegend explorativen Charakter, um Muster in den Verbindungen zu untersuchen.
+
+# Datenerhebung: Zugang, Bereinigung und Codebuch
+
+## Datenzugang
+
+Die Daten konnten wir dem Archiv des Deutschen Buchpreises entnehmen. Dort sind alle Nominierten der Shortlist von 2005 bis 2022 gelistet. Berücksichtigt wurden dabei alle vorhandenen Daten seit 2005. Davon ausgehend haben wir die Autorinnen und Autoren weiter recherchiert und die vorherigen sowie im nachhinein gewonnenen Auszeichnungen von Webseiten der Verlage sowie über Wikipedia-Listen und andere Webseiten nachrecherchiert. Bei der Erhebung sind wir nach Jahren vorgegangen und haben auf die Kriterien der Preise geachtet, sodass am Ende Buchpreise, Literaturpreise, Förderpreise und Stipendien erhoben wurden. 
+
+
+## Bereinigung des Datensatzes 
+
+In dem Datensatz wurden doppelte IDs gesucht und anschließend bereinigt. Die Node-Attribute Thema und Genre wurden vereinheitlicht. Weitergehend wurde das Node-Attribute Herkunft als neue Kategorie hinzugefügt und erhoben. Außerdem wurden in der Edgelist der type “Buchpreis gewonnen” hinzugefügt und die Preise nach Förderpreisen und Stipendien getrennt. 
+
+In unserem Code haben wir dann alle Knoten mit null Verbindungen gelöscht.
+
+
+## Codebuch
+
+Das Codebuch beschreibt die Variablen, Relationen und Gewichte des Netzwerks und ist ebenfalls auf Github hinterlegt. Zu finden unter https://raw.githubusercontent.com/CI017/Projekt-Buchpreis/main/FINAL%20-%20Codebuch.csv.
+
+
+# Analyse und Interpretation
+
+Hinweis: Bei der Analyse und Interpretation lassen wir wegen des großen Netzwerks und aus Gründen der Übersichtlichkeit nur die für die zentralen Ergebnisse relevanten Codes anzeigen.
+
+## Das Gesamtnetzwerk
+
+Das Gesamtnetzwerk umfasst 560 Knoten und 1163 Kanten. Es besteht aus drei Komponenten mit 552, 5 und 3 Knoten, die nicht
+miteinander verbunden sind. Es ist ungerichtet und nicht gewichtet. Die Dichte im Netzwerk beträgt 0,74 Prozent von allen möglichen Verbindungen. Die maximale Distanz zwischen zwei Knoten beträgt 9 Schritte. 
+
+```{r Gesamnetzwerk erstellen, echo=FALSE, fig.height=20, fig.width=26, message=FALSE, warning=FALSE, paged.print=TRUE}
+
+library(igraph)
+
+# Einlesen der Edge- und Nodelist
+
+edges <- read.csv("https://raw.githubusercontent.com/CI017/Projekt-Buchpreis/main/FINAL%20-%20Edgelist.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/CI017/Projekt-Buchpreis/main/FINAL%20-%20Nodelist.csv", header=T, as.is=T, sep = ",")
+
+# Matrix erstellen
+
+edgematrix <-as.matrix(edges)
+
+# Zusammenführen von Edge- und Nodelist als igraph-Objekt bp
+
+bp <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=F)
+
+bp
+
+# Dichte des Netzwerks
+edge_density(bp, loops=FALSE)
+
+# Durchmesser des Netzwerks
+diameter(bp)
+farthest_vertices(bp)
+
+list.vertex.attributes(bp)
+V(bp)$label <- NA
+
+# einfache Visualisierung des Gesamtnetzwerkes ohne Labels für die Übersichtlichkeit
+plot(bp,
+asp=0,
+layout=layout_with_kk,
+vertex.size=2,
+main ="Übersicht Gesamtnetzwerk")
+
+
+```
+
+
+
+```{r Bereinigung, echo=TRUE}
+
+# Wir löschen alle Knoten mit null Verbindungen.
+
+V(bp)$degree <- degree(bp)
+bpn <- delete_vertices(bp, V(bp)[degree == "0"])
+
+```
+
+
+### Betweenness des Gesamtnetzwerks
+
+
+Wir berechnen die Betweenness des gesamten Netzwerks. Die Betweennessrate misst den Broker-Status von Knoten in einem Netzwerk (Fuhse, 2018).
+
+
+Der gößte Betweenness-Wert im Gesamtnetzwerk hat der Ingeborg-Bachmann-Preis mit 11,48 Prozent. Die Autorin Herta Müller folgt daraufhin mit einem Betweenness-Wert von 8,5 und Marion Poschmann mit einem Wert von 8,14. Der Ingeborg-Bachmann-Preis scheint eine zentrale Rolle im Gesamtnetzwerk zu haben und ebenfalls ein bedeutender Buchpreis zu sein. Er fungiert als Broker zwischen den Autorinnen und Autoren, Büchern und Verlagen.
+
+
+```{r Betweenness Vorbereitung, fig.height=20, fig.width=24, include=FALSE}
+
+# Wir berechnen die Betweenness des Gesamtnetzwerkes.
+
+V(bp)$betweenness <- betweenness(bp, normalized = TRUE)
+
+
+# erstellt data.frames (Tabellen) aus dem igraph Objekt
+
+
+between_nl <- igraph::as_data_frame(bp, "vertices" )
+between_el <- igraph::as_data_frame(bp, "edges" )
+
+
+
+# df aufrufen
+between_nl
+between_el
+
+```
+
+```{r Betweenness, echo=TRUE, fig.height=20, fig.width=24}
+
+# Die Top3 Betweenness
+between_nl  %>% 
+  select(name, betweenness) |> 
+  slice_max(betweenness, n=3)
+```
+
+
+## Analyse der Teilnetzwerke 
+
+Für die weitere Analyse und die Frage nach den wichtigsten Akteuren in den jeweiligen types erstellen wir Teilnetzwerke nach Verlagen, Autorinnen und Autoren, Auszeichnungen und Gewinnerbüchern.
+
+### Teilnetzwerke der Verlage nach Beziehungsart
+
+Im ersten Schritt berechnen wir die Top3 Verlage insgesamt nach dem Degree-Wert.
+
+Die Top3 Verlage nach Degree sind Suhrkamp mit einem Degree-Wert von 19, Carl Hanser Verlag mit 17 und Kiepenheuer & Witsch mit 12. 
+
+Der Suhrkamp Verlag wurde 1950 gegründet. Zu ihm gehören Autoren wie Bertolt Brecht und Hermann Hesse. Der Carl Hanser Verlag wurde 1928 gegründet und gehört zu den wenigen mittelständischen Verlagen in Deutschland, die sich noch im Besitz der Gründerfamilie befinden. Er versammelt außerdem mehr Nobelpreisträgerinnen und Nobelpreisträger unter seinen Autorinnen und Autoren als jeder andere deutsche Verlag. Der Kiepenheuer & Witsch Verlag wurde 1948 gegründet und verlegt kritische und populäre Sachbücher sowie literarische Werke und Belletristik. 
+
+Interessant ist, dass alle drei Verlage zu den renommiertesten Verlagen im deutschsprachigen Raum gehören. So zähleten sie laut einer Rangliste des CICERO-Magazins zur Leipziger Buchmesse 2010 zu den sechs renommiertesten Verlagen. Auch der S.Fischer Verlag und Rohwolt sind als größere Knoten im Netzwerk gut zu erkennen und zählen zu den bekannten Verlagen Deutschlands (Die Buch-Macher, 2010).
+
+```{r Degree Verlage Top3 Vorbereitung, fig.height=9, fig.width=16, include=FALSE}
+
+# Wir berechnen den Degree Wert der Verlage. Dazu erstellen wir zunächst ein Teilnetzwerk mit der relation = 3.
+
+V(bp)$label <- V(bp)$name
+
+vd <- subgraph.edges(bp, E(bp)[relation == 3])
+
+V(vd)$degree <- degree(vd)
+
+# erstellt data.frames (Tabellen) aus dem igraph Objekt
+vd_nodelist <- igraph::as_data_frame(vd, "vertices" )
+vd_edgelist <- igraph::as_data_frame(vd, "edges" )
+
+# df aufrufen
+vd_nodelist
+vd_edgelist
+
+```
+
+
+```{r Degree Verlage Top3, echo=TRUE, fig.height=9, fig.width=16}
+
+# Die Top3 Degrees
+vd_nodelist |> 
+  filter(type == 1) %>% 
+  select(name, degree) |> 
+  slice_max(degree, n=3)
+
+#Wir visualisieren
+
+V(vd)[V(vd)$type== 1]$color <- "green"
+V(vd)[V(vd)$type== 7]$color <- "blue"
+V(vd)[V(vd)$type== 3]$color <- "orange"
+
+plot(vd,
+     asp=0,
+     layout=layout_with_kk,
+     vertex.size = degree(vd),
+     rescale=TRUE,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Verlage beim Deutschen Buchpreis")
+
+
+```
+
+Im zweiten Schritt wollen wir wissen, welche Verlage unter den Gewinnerbüchern am stärksten sind. 
+
+Unter den Gewinnerbüchern ist immer noch Suhrkamp an der Spitze mit einem Degree-Wert von 4. Danach folgt Rohwolt, der Jung und Jung Verlag sowie S.Fischer mit einem Degree-Wert von 2. Es zeigt sich, dass Suhrkamp der einzige Verlag ist, der häufiger als zweimal unter den Gewinnerbüchern vertreten war. 
+
+
+
+```{r Degree Verlage Gewinnerbücher Vorbereitung, fig.height=9, fig.width=16, include=FALSE}
+
+# Wir verwenden wieder das Teilnetzwerk der Verlage mit der relation = 3.
+
+V(bp)$label <- V(bp)$name
+
+vd <- subgraph.edges(bp, E(bp)[relation == 3])
+
+# Wir wollen nur die Verbindungen zu Gewinnerbüchern haben und löschen die Bücher der Shortlist (type = 3) deshalb raus. 
+
+vgd <- delete_vertices(vd, V(vd)[type == "3"])
+
+V(vgd)$degree <- degree(vgd)
+
+# erstellt data.frames (Tabellen) aus dem igraph Objekt
+vgd_nodelist <- igraph::as_data_frame(vgd, "vertices" )
+vgd_edgelist <- igraph::as_data_frame(vgd, "edges" )
+
+# df aufrufen
+vgd_nodelist
+vgd_edgelist
+```
+
+```{r Degree Verlage Gewinnerbücher, echo=TRUE, fig.height=9, fig.width=16}
+
+# Die Top3 Degrees
+vgd_nodelist |> 
+  filter(type == 1) %>% 
+  select(name, degree) |> 
+  slice_max(degree, n=3)
+
+# Für die Visualisierung löschen wir die Verlage, die keine Verbindung haben, weil sie zu einem nominierten Buch gehören, raus.
+
+vgd1 <- delete_vertices(vgd, V(vgd)[degree == "0"])
+
+V(vgd1)[V(vgd1)$type== 1]$color <- "green"
+V(vgd1)[V(vgd1)$type== 7]$color <- "blue"
+
+plot(vgd1,
+     asp=0,
+     layout=layout_with_kk,
+     vertex.size = degree(vgd1),
+     rescale=TRUE,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Verlage der Gewinnerbücher")
+
+```
+
+Um herauszufinden, ob der Suhrkamp Verlag, der Carl Hanser Verlag sowie der Kiepenheuer & Witsch Verlag im Laufe der Zeit immer an der Spitze standen, untersuchen wir die Degree-Werte der halben Dekaden. Es zeigt sich, dass Suhrkamp in den vier halben Dekaden immer unter den Top 3 Verlagen vertreten war. Der Hanser Verlag ist zwischen 2010 und 2014 nicht an der Spitze verteten. Kiepenheuer & Witsch ist sogar nur in zwei halben Dekaden vertreten.
+
+```{r wichtigste Verlage, echo=TRUE}
+
+vd <- subgraph.edges(bp, E(bp)[relation == 3])
+
+#Erste halbe Dekade
+
+eins_v <- subgraph.edges(vd, E(vd)[year >= 2005 & year <= 2009])
+V(eins_v)$degree <- degree(eins_v)
+
+vd1_nl <- igraph::as_data_frame(eins_v, "vertices" )
+vd1_el <- igraph::as_data_frame(eins_v, "edges" )
+
+vd1_nl |> 
+  filter(type == 1) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+# Zweite halbe Dekade
+
+zwei_v <- subgraph.edges(vd, E(vd)[year >= 2010 & year <= 2014])
+V(zwei_v)$degree <- degree(zwei_v)
+
+vd2_nl <- igraph::as_data_frame(zwei_v, "vertices" )
+vd2_el <- igraph::as_data_frame(zwei_v, "edges" )
+
+vd2_nl |> 
+  filter(type == 1) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+# Dritte halbe Dekade
+
+drei_v <- subgraph.edges(vd, E(vd)[year >= 2015 & year <= 2019])
+V(drei_v)$degree <- degree(drei_v)
+
+vd3_nl <- igraph::as_data_frame(drei_v, "vertices" )
+vd3_el <- igraph::as_data_frame(drei_v, "edges" )
+
+vd3_nl |> 
+  filter(type == 1) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+#Vierte halbe Dekade
+
+vier_v <- subgraph.edges(vd, E(vd)[year >= 2020 & year <= 2022])
+V(vier_v)$degree <- degree(vier_v)
+
+vd4_nl <- igraph::as_data_frame(vier_v, "vertices" )
+vd4_el <- igraph::as_data_frame(vier_v, "edges" )
+
+# Die Top3 Degrees
+vd4_nl |> 
+  filter(type == 1) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+```
+
+Dieses Teilnetzwerk zeigt die Verlage mit ihren verlegten Büchern und deren Autorinnen und Autoren an. Dabei soll eine Hervorhebung der Geschlechter zeigen, wie sich die Geschlechterverteilung bei den jeweiligen Verlagen verhält. 
+
+Es zeigt sich, dass alle Verlage mehrheitlich mit Männern auf der Shortlist des Buchpreises vertreten sind. Es gibt keinen Verlag, der mehr Frauen verlegt hat. Man kann außerdem sehr gut erkennen, dass manche Autorinnen und Autoren zwischen den Verlagen gewechselt haben. Beispiele dafür sind Clemens Seitz, Thomas Lehr und Inger-Maria Mahlke. Bei den größeren Verlagen scheinen die Autorinnen und Autoren vor allem dem S. Fischer Verlag sehr treu geblieben zu sein bzw. standen mit keinem anderen Verlag auf der Shortlist des Deutschen Buchpreises.
+
+
+
+```{r Geschlechterverteilung bei den Verlagen, echo=TRUE, fig.height=16, fig.width=24}
+
+# Teilnetzwerk ohne (Förder-)Preise und Stipendien, nur noch Verlage, Autor*innen und Bücher
+
+V(bp)$label <- V(bp)$name
+
+verlage <- delete_vertices(bp, V(bp)[type == "2"])
+verlage1 <- delete_vertices(verlage, V(verlage)[type == "5"])
+v_sex <- delete_vertices(verlage1, V(verlage1)[type == "6"])
+
+V(v_sex)[V(v_sex)$sex== 2]$color <- "lightblue"
+V(v_sex)[V(v_sex)$sex== 3]$color <- "lightgrey"
+V(v_sex)[V(v_sex)$sex== 1]$color <- "pink"
+V(v_sex)[V(v_sex)$type== 1]$color <- "green"
+V(v_sex)[V(v_sex)$type== 1]$shape <- "square"
+V(v_sex)[V(v_sex)$type== 3]$shape <- "square"
+V(v_sex)[V(v_sex)$type== 4]$shape <- "circle"
+V(v_sex)[V(v_sex)$type== 7]$shape <- "square"
+V(v_sex)[V(v_sex)$type== 8]$shape <- "circle"
+
+plot(v_sex,
+     asp=0,
+     layout=layout_with_kk,
+     rescale=TRUE,
+     vertex.size = 2,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Geschlechterverteilung",
+     sub="bei den Verlagen")
+
+```
+
+In den Jahren 2018 und 2019 lag ein besonderes Augenmerk auf den Verlagen in Bezug auf die Diskrepanz zwischen den verlegten Autorinnen und Autoren. Unter dem Hashtag #vorschauenzählen wurde auf Twitter dazu aufgerufen, die Frühjahrsprogrammvorschauen der Verlage nach den Geschlechtern durchzuzählen. Besonders der Hanser Verlag sowie Rohwolt waren in den Fokus eines großen Ungleichgewichts geraten (Glanz & Seifert, 2019). 
+
+Das Teilnetzwerk der Autorinnen und Autoren nach Dekaden soll die Geschlechterverteilung bei den Nominierungen im Laufe der Zeit zeigen. Wir sind davon ausgegangen, dass sich das Verhältnis zwischen Männern und Frauen über die Jahre verändert. Doch die Visualisierung zeigt, dass sich kaum etwas verändert hat. Unter den Nominierten sind nach wie vor mehrheitlich Männer. 
+
+
+```{r Teilnetzwerke Dekaden Geschlechterverteilung, echo=TRUE, fig.height=9, fig.width=16}
+
+# Teilnetzwerke ohne die Relation 2 und 3.
+
+V(bp)$label <- V(bp)$name
+
+gesch <- subgraph.edges(bp, E(bp)[relation != 3])
+tsex <- subgraph.edges(gesch, E(gesch)[relation != 2])
+
+
+eins <- subgraph.edges(tsex, E(tsex)[year >= 2005 & year <= 2009])
+zwei <- subgraph.edges(tsex, E(tsex)[year >= 2010 & year <= 2014])
+drei <- subgraph.edges(tsex, E(tsex)[year >= 2015 & year <= 2019])
+vier <- subgraph.edges(tsex, E(tsex)[year >= 2020 & year <= 2022])
+
+par(mfrow=c(1,4), mar=c(2,0,2,0))
+
+
+# Jahre 2005 bis 2009
+
+V(eins)[V(eins)$sex== 2]$color <- "lightblue"
+V(eins)[V(eins)$sex== 3]$color <- "lightgrey"
+V(eins)[V(eins)$sex== 1]$color <- "pink"
+V(eins)[V(eins)$type== 3]$shape <- "square"
+V(eins)[V(eins)$type== 7]$shape <- "square"
+V(eins)[V(eins)$type== 4]$shape <- "circle"
+V(eins)[V(eins)$type== 8]$shape <- "circle"
+
+plot(eins,
+     asp=0,
+     layout=layout_with_kk,
+     rescale=TRUE,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Geschlechterverteilung",
+     sub="Jahre 2005 bis 2009")
+
+V(zwei)[V(zwei)$sex== 2]$color <- "lightblue"
+V(zwei)[V(zwei)$sex== 3]$color <- "lightgrey"
+V(zwei)[V(zwei)$sex== 1]$color <- "pink"
+V(zwei)[V(zwei)$type== 3]$shape <- "square"
+V(zwei)[V(zwei)$type== 7]$shape <- "square"
+V(zwei)[V(zwei)$type== 4]$shape <- "circle"
+V(zwei)[V(zwei)$type== 8]$shape <- "circle"
+
+# Jahre 2010 bis 2014
+plot(zwei,
+     asp=0,
+     layout=layout_with_kk,
+     rescale=TRUE,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Geschlechterverteilung",
+     sub="Jahre 2010 bis 2014")
+
+V(drei)[V(drei)$sex== 2]$color <- "lightblue"
+V(drei)[V(drei)$sex== 3]$color <- "lightgrey"
+V(drei)[V(drei)$sex== 1]$color <- "pink"
+V(drei)[V(drei)$type== 3]$shape <- "square"
+V(drei)[V(drei)$type== 7]$shape <- "square"
+V(drei)[V(drei)$type== 4]$shape <- "circle"
+V(drei)[V(drei)$type== 8]$shape <- "circle"
+
+# Jahre 2015 bis 2019
+plot(drei,
+     asp=0,
+     layout=layout_with_kk,
+     rescale=TRUE,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Geschlechterverteilung",
+     sub="Jahre 2015 bis 2019")
+
+V(vier)[V(vier)$sex== 2]$color <- "lightblue"
+V(vier)[V(vier)$sex== 3]$color <- "lightgrey"
+V(vier)[V(vier)$sex== 1]$color <- "pink"
+V(vier)[V(vier)$type== 3]$shape <- "square"
+V(vier)[V(vier)$type== 7]$shape <- "square"
+V(vier)[V(vier)$type== 4]$shape <- "circle"
+V(vier)[V(vier)$type== 8]$shape <- "circle"
+
+# Jahre 2020 bis 2022
+plot(vier,
+     asp=0,
+     layout=layout_with_kk,
+     rescale=TRUE,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Geschlechterverteilung",
+     sub="Jahre 2020 bis 2022")
+```
+
+
+### Teilnetzwerke der Autorinnen und Autoren nach Beziehungsart
+
+Top3 Autorinnen und Autoren der Shortlist: Welche Autor*innen haben die meisten Preise insgesamt gewonnen? 
+
+Der Degree-Wert der Autorinnen und Autoren zeigt, welcher Akteur die meisten Preise insgesamt gewonnen hat. Die Top3 der Autorinnen und Autoren sind Herta Müller mit einem Degree von 33, gefolgt von Marion Poschmann mit einem Degree-Wert von 32. Mit einem größeren Abstand folgt der Autor Robert Menasse mit einem Degree-Wert von 23. 
+
+Im Vergleich dazu wurden die Top3 der Buchpreis-Gewinnerinnen und Gewinner ausgewertet. Hier sind Robert Menasse mit 23, Saša Stanišić	mit	21 und Terezia Mora mit einem Degree-Wert von 20 an der Spitze.
+
+Auffällig ist, dass zwei der Top3 der Gesamten keine Gewinner, sondern nur Nominierte sind. Die Top3 Gewinner haben deutlichen weniger Verbindungen, als die Top3 gesamt.
+
+```{r Degree Autor*innen gesamt Vorbereitung, include=FALSE}
+
+V(bp)$label <- V(bp)$name
+
+V(bp)$degree <- degree(bp)
+
+# erstellt data.frames (Tabellen) aus dem igraph Objekt
+
+autor_nl <- igraph::as_data_frame(bp, "vertices" )
+autor_el <- igraph::as_data_frame(bp, "edges" )
+
+
+# df aufrufen
+autor_nl
+autor_el
+
+```
+
+```{r Degree Autor*innen gesamt, echo=TRUE}
+# Die Top3 Degrees
+autor_nl|> 
+  filter(type == 4 | type == 8) %>%  
+  select(name, type, degree) |> 
+  slice_max(degree, n=3)
+
+# Die Top3-Degress der Gewinner*innen
+
+autor_nl|> 
+  filter(type == 8) %>%  
+  select(name, type, degree) |> 
+  slice_max(degree, n=3)
+
+```
+
+Gewinner Top3 Männer (All Stars)
+
+Robert Menasse ist die Nummer 1 mit einem Degree von 23, gefolgt von Thomas Lehr, Saša Stanišić und Thomas Hettche, die jeweils einen Degree von 20 haben.
+
+```{r Top 3 Männer Vorbereitung, include=FALSE}
+
+V(bp)$label <- V(bp)$name
+
+gewinner <- subgraph.edges(bp, E(bp)[relation != 3])
+gewinner_neu <- subgraph.edges(gewinner, E(gewinner)[relation != 1])
+
+# Nur die Männer
+
+man_gw <- delete_vertices(gewinner_neu, V(gewinner_neu)[sex == "1"])
+man_gw1 <- delete_vertices(man_gw, V(man_gw)[sex == "3"])
+
+man_gwd <- degree(man_gw1,mode="all")
+V(man_gw1)$degree <- degree(man_gw1)
+
+
+men_nl <- igraph::as_data_frame(man_gw1, "vertices" )
+men_el <- igraph::as_data_frame(man_gw1, "edges" )
+
+
+men_nl
+men_el
+
+```
+
+```{r Top 3 Männer, echo=TRUE}
+men_nl |> 
+  filter(type == 8 | type == 4) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+```
+
+
+Gewinnerinnen Top 3 Frauen (All Stars)
+
+Die Nummer 1 der Gewinnerinnen ist Herta Müller mit einem Degree-Wert von 32, gefolgt von Marion Poschmann und Friederike Mayroecker. 
+Die beiden Teilberechnungen (Allstar-Männer und Allstar-Frauen) ergeben, dass die Top3 Frauen viel mehr Preise gewonnen haben, keine von ihnen aber den Buchpreis gewonnen hat. Wogegen die Top3 Männer insgesamt viel weniger Preise gewonnen haben, zwei von ihnen jedoch den Buchpreis bekommen haben.
+
+```{r Top 3 Frauen Vorbereitung, include=FALSE}
+
+V(bp)$label <- V(bp)$name
+gewinner <- subgraph.edges(bp, E(bp)[relation != 3])
+gewinner_neu <- subgraph.edges(gewinner, E(gewinner)[relation != 1])
+
+# Nur die Frauen
+
+woman_gw <- delete_vertices(gewinner_neu, V(gewinner_neu)[sex == "2"])
+woman_gw1 <- delete_vertices(woman_gw, V(woman_gw)[sex == "3"])
+
+
+V(woman_gw1)$degree <- degree(woman_gw1)
+
+
+women_nl <- igraph::as_data_frame(woman_gw1, "vertices" )
+women_el <- igraph::as_data_frame(woman_gw1, "edges" )
+
+
+women_nl
+women_el
+
+```
+
+```{r Top 3 Frauen, echo=TRUE}
+women_nl |> 
+  filter(type == 8 | type == 4) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+```
+
+
+Gewinnende Top 3 divers (All Stars)
+
+Diverse Autor:innen haben deutlich weniger Preise insgesamt gewonnen. Trotzdem ist ein:e Gewinner:in unter ihnen.
+
+
+```{r Top 3 divers Vorbereitung, include=FALSE}
+
+V(bp)$label <- V(bp)$name
+
+gewinner <- subgraph.edges(bp, E(bp)[relation != 3])
+gewinner_neu <- subgraph.edges(gewinner, E(gewinner)[relation != 1])
+
+# Nur die Diversen
+
+divers_gw <- delete_vertices(gewinner_neu, V(gewinner_neu)[sex == "2"])
+divers_gw1 <- delete_vertices(divers_gw, V(divers_gw)[sex == "1"])
+
+
+V(divers_gw1)$degree <- degree(divers_gw1)
+
+
+divers_nl <- igraph::as_data_frame(divers_gw1, "vertices" )
+divers_el <- igraph::as_data_frame(divers_gw1, "edges" )
+```
+
+```{r Top 3 divers, echo=TRUE}
+divers_nl |> 
+  filter(type == 8 | type == 4) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+```
+
+
+Wer sind die Hidden Stars? 
+
+In diesem Teilnetzwerk wird untersucht, ob es Autorinnen und Autoren gibt, die sehr viele andere Preise gewonnen haben, aber noch nie den Deutschen Buchpreis. 
+
+Auffällig ist, dass die Top3 Hidden Stars den Top3 Allstars der Frauen entsprechen. Auf Platz 1 ist Herta Müller (degree 32), dicht gefolgt von Marion Poschmann (degree 30) und mit etwas Abstand Friederike Mayorecker (degree 21). Diese drei Frauen haben unter allen Nominierten und Gewinnenden des Deutschen Buchpreises am meisten Preise gewonnen - allerdings noch nie den Deutschen Buchpreis selbst. 
+
+
+
+```{r Hidden Stars Vorbereitung, fig.height=20, fig.width=24, include=FALSE}
+
+# Wir erstellen das Teilnetzwerk siege, in dem nur Verbindung 2 = gewonnen enthalten ist. 
+
+siege <- subgraph.edges(bpn, E(bpn)[relation == 2])
+
+V(siege)$degree <- degree(siege)
+vertex.attributes(siege)$degree
+
+hidden_nl <- igraph::as_data_frame(siege, "vertices" )
+hidden_el <- igraph::as_data_frame(siege, "edges" )
+
+```
+
+```{r Hidden Stars, echo=TRUE, fig.height=20, fig.width=24}
+
+# Top3 Degrees der Autor*innen auf der Shortlist aber nicht Buchpreis gewonnen.
+hidden_nl |> 
+  filter(type == 4) %>% 
+  select(name, degree) |> 
+  slice_max(degree, n=3)
+
+```
+
+
+
+### Teilnetzwerke der Auszeichnungen
+
+Top Preise: Welches sind die wichtigsten Preise?
+
+Der Preis mit dem höchsten Degree-Wert von 21 ist der Ingeborg-Bachmann-Preis. Der Ingeborg-Bachmann-Preis wird von der Landeshauptstadt Klagenfurt am Wörthersee gestiftet und ist mit 25.000 Euro dotiert. Er wird seit 1977 jährlich vergeben. Die Verleihung des Deutschen Buchpreises ist mit der Verleihung des Ingeborg-Bachmann-Preises vergleichbar - beide Preisvergaben werden als "einzigartige Events" bezeichnet (Irsigler & Lembke, 2014). Interessant ist also, dass viele der Nominierten des Deutschen Buchpreises auch den Ingeborg-Bachmann-Preis gewonnen haben. Dabei kann die Annahme getroffen werden, dass es eine wichtiger Preis für die Nominierten des Deutschen Buchpreises ist. 
+
+Danach folgen der aspekte-Literaturpreis und der Wilhelm-Raabe-Literaturpreis, beide mit dem Degree-Wert 17. Diese beiden Preise werden jeweils vom ZDF und vom Deutschlandfunk gefördert, also von zwei großen öffentlich-rechtlichen Medien.
+
+Aufgeteilt über die Jahre 2005-2022 sticht kein Preis heraus, der immer unter den Top-Preisen landet. Mindestens einer der Top3 Preise ist dennoch immer vertreten, was für die Bedeutung dieser Preise für die Nominierten spricht. Zu anderen Preisen, die in mehr als einer halben Dekade auftauchen zählen z.B. der Preis der Jürgen-Ponto-Stiftung und der Preis der Leipziger Buchmesse.
+
+Da nicht ersichtlich ist, ob diese Preise vor oder nach dem Gewinn bzw. der Nominierung für den Deutschen Buchpreis gewonnen wurden, kann der Matthäus-Effekt nicht eindeutig bestätigt werden. Offenbar sind diese Preise trotzdem relevant für die Autorinnen und Autoren, die auf der Shortlist des Deutschen Buchpreises stehen.
+
+```{r wichtige Preise über die Jahre, echo=FALSE, fig.height=10, fig.width=15}
+
+# wir verwenden wieder das Netzwerk der gewonnnenen Preise mit relation = 2.
+
+V(bpn)$label <- V(bpn)$name
+
+siege <- subgraph.edges(bpn, E(bpn)[relation == 2])
+
+# Wir wollen nur die Preise (node-type 2)
+
+siege_b <- delete_vertices(siege, V(siege)[type == "5"])
+siege_b1 <- delete_vertices(siege_b, V(siege_b)[type == "6"])
+
+
+V(siege_b1)$degree <- degree(siege_b1)
+
+# erstellt data.frames (Tabellen) aus dem igraph Objekt
+
+preise_nl <- igraph::as_data_frame(siege_b1, "vertices" )
+preise_el <- igraph::as_data_frame(siege_b1, "edges" )
+
+
+# Die Top3 Degrees
+preise_nl |> 
+  filter(type == 2) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+
+# Wir erstellen Teilnetzwerke nach halben Dekaden
+
+eins_p <- subgraph.edges(siege_b1, E(siege_b1)[year >= 2005 & year <= 2009])
+V(eins_p)$degree <- degree(eins_p)
+
+eins_nl <- igraph::as_data_frame(eins_p, "vertices" )
+eins_el <- igraph::as_data_frame(eins_p, "edges" )
+
+# Die Top3 Degrees
+eins_nl |> 
+  filter(type == 2) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+# Zweite Dekade
+
+zwei_p <- subgraph.edges(siege_b1, E(siege_b1)[year >= 2010 & year <= 2014])
+V(zwei_p)$degree <- degree(zwei_p)
+
+zwei_nl <- igraph::as_data_frame(zwei_p, "vertices" )
+zwei_el <- igraph::as_data_frame(zwei_p, "edges" )
+
+# Die Top3 Degrees
+zwei_nl |> 
+  filter(type == 2) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+# Dritte Dekade
+
+drei_p <- subgraph.edges(siege_b1, E(siege_b1)[year >= 2015 & year <= 2019])
+V(drei_p)$degree <- degree(drei_p)
+
+drei_nl <- igraph::as_data_frame(drei_p, "vertices" )
+drei_el <- igraph::as_data_frame(drei_p, "edges" )
+
+# Die Top3 Degrees
+drei_nl |> 
+  filter(type == 2) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+# Vierte Dekade
+
+vier_p <- subgraph.edges(siege_b1, E(siege_b1)[year >= 2020 & year <= 2022])
+V(vier_p)$degree <- degree(vier_p)
+
+vier_nl <- igraph::as_data_frame(vier_p, "vertices" )
+vier_el <- igraph::as_data_frame(vier_p, "edges" )
+
+# Die Top3 Degrees
+vier_nl |> 
+  filter(type == 2) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+#Wir visulaisieren
+
+V(eins_p)[V(eins_p)$type== 2]$color <- "red"        # Preise
+V(eins_p)[V(eins_p)$type== 3]$color <- "lightgrey" #Shortlist-Bücher
+V(eins_p)[V(eins_p)$type==7]$color <- "lightblue" #Gewinnerbücher
+V(eins_p)[V(eins_p)$type== 4]$color <- "yellow"   # Autor*innen
+V(eins_p)[V(eins_p)$type== 8]$color <- "green"   # Autor*innen Gewinner
+
+plot(eins_p,
+     asp=0,
+     layout=layout_with_kk,
+     vertex.size = degree(eins_p),
+     rescale=TRUE,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Wichtige Preise",
+     sub="Jahre 2005 bis 2009")
+
+V(zwei_p)[V(zwei_p)$type== 2]$color <- "red"        # Preise
+V(zwei_p)[V(zwei_p)$type== 3]$color <- "lightgrey" #Shortlist-Bücher
+V(zwei_p)[V(zwei_p)$type==7]$color <- "lightblue" #Gewinnerbücher
+V(zwei_p)[V(zwei_p)$type== 4]$color <- "yellow"   # Autor*innen
+V(zwei_p)[V(zwei_p)$type== 8]$color <- "green"   # Autor*innen Gewinner
+
+# Jahre 2010 bis 2014
+plot(zwei_p,
+     asp=0,
+     layout=layout_with_kk,
+     rescale=TRUE,
+     vertex.size = degree(zwei_p),
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Wichtige Preise",
+     sub="Jahre 2010 bis 2014")
+
+V(drei_p)[V(drei_p)$type== 2]$color <- "red"        # Preise
+V(drei_p)[V(drei_p)$type== 3]$color <- "lightgrey" #Shortlist-Bücher
+V(drei_p)[V(drei_p)$type==7]$color <- "lightblue" #Gewinnerbücher
+V(drei_p)[V(drei_p)$type== 4]$color <- "yellow"   # Autor*innen
+V(drei_p)[V(drei_p)$type== 8]$color <- "green"   # Autor*innen Gewinner
+
+
+
+# Jahre 2015 bis 2019
+plot(drei_p,
+     asp=0,
+     layout=layout_with_kk,
+     vertex.size = degree(drei_p),
+     rescale=TRUE,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Wichtige Preise",
+     sub="Jahre 2015 bis 2019")
+
+V(vier_p)[V(vier_p)$type== 2]$color <- "red"        # Preise
+V(vier_p)[V(vier_p)$type== 3]$color <- "lightgrey" #Shortlist-Bücher
+V(vier_p)[V(vier_p)$type==7]$color <- "lightblue" #Gewinnerbücher
+V(vier_p)[V(vier_p)$type== 4]$color <- "yellow"   # Autor*innen
+V(vier_p)[V(vier_p)$type== 8]$color <- "green"   # Autor*innen Gewinner
+
+
+# Jahre 2020 bis 2022
+plot(vier_p,
+     asp=0,
+     layout=layout_with_kk,
+     vertex.size = degree(vier_p),
+     rescale=TRUE,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Wichtige Preise",
+     sub="Jahre 2020 bis 2022")
+
+```
+
+
+Top Förderpreise und Stipendien: Welches sind die wichtigsten Förderpreise und Stipendien? 
+
+Außerdem sind die wichtigen Förderpreise und Stipendien interessant, da sie besonders junge Autorinnen und Autoren fördern und zu einer möglichen Karriere verhelfen.
+
+Das bedeutsamste Stipendium nach Degree-Wert ist das Stipendium der Deutschen Akademie Rom Villa Massimo. Die Akademie vergibt veschiedenste Stipendien, um Künstlerinnen und Künstler im Bereich der Bildenden Kunst, Architektur, Literatur und Musik zu fördern. 
+
+Auf Platz 2 landet der Preis der Stadtschreiber von Bergen. Stadtschreiber gibt es in sehr vielen deutschen Städten, daher ist es interessant, dass gerade Bergen herraussticht. Das könnte daran liegen, dass der Stadtschreiber von Bergen der erste seiner Art im deutschsprachigen Raum war und daher ein gewisses Renommee und Stolz mit dieser Auszeichnung verbunden ist (Die Stadtschreiber von Bergen-Enkheim, o.D.).
+
+Mit einem ähnlichen Degree-Wert folgt das Arbeitsstipendium des Deutschen Literaturfonds. Laut eigenen Angaben, fördert der Deutsche Literaturfonds als einzige Institution Deutschlands "die deutschsprachige Literatur überregional, marktunabhängig und jenseits politischer Vorgaben". Interessanterweise ist, dass der Börsenverein des Deutschen Buchhandels Gründungsmitglied des Deutschen Literaturfonds ist (Deutscher Literaturfonds, o.D.). Ersterer verleiht jährlich auch den Deutschen Buchpreis. 
+
+Wie erwartet taucht mindestens einer der Top3-Preise auch über die halben Dekaden auf. Der Stadtschreiber von Bergen taucht lediglich in den Jahren von 2010-2014 nicht unter den wichtigsten Förderpreisen auf. Dies kann aber einfach auf die zufällige, individuelle Aufteilung der Dekaden zurückzuführen sein. Abgesehen davon sticht der Förderpreis des Bremer Literaturpreis als bedeutsamer Förderpreis für die Autorinnen und Autoren auf der Shortlist des Deutschen Buchpreises heraus.
+
+
+```{r wichtige Förderpreise und Stipendien über die Jahre, echo=FALSE, fig.height=10, fig.width=15}
+
+# wir verwenden wieder das Netzwerk der gewonnnenen Preise mit relation = 2.
+
+V(bpn)$label <- V(bpn)$name
+
+siege <- subgraph.edges(bpn, E(bpn)[relation == 2])
+
+# Wir wollen nur die Preise (node-type 5 und 6)
+
+foerder_b1 <- delete_vertices(siege, V(siege)[type == "2"])
+
+
+V(foerder_b1)$degree <- degree(foerder_b1)
+
+foerder_nl <- igraph::as_data_frame(foerder_b1, "vertices" )
+foerder_el <- igraph::as_data_frame(foerder_b1, "edges" )
+
+# Die Top3 Degrees
+foerder_nl |> 
+  filter(type == 5 | type == 6) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+# Wir erstellen Teilnetzwerke nach halben Dekaden
+
+# Erste halbe Dekade
+eins_f <- subgraph.edges(foerder_b1, E(foerder_b1)[year >= 2005 & year <= 2009])
+V(eins_f)$degree <- degree(eins_f)
+
+f1_nl <- igraph::as_data_frame(eins_f, "vertices" )
+f1_el <- igraph::as_data_frame(eins_f, "edges" )
+
+# Die Top3 Degrees
+f1_nl |> 
+  filter(type == 5 | type == 6) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+# Zweite halbe Dekade
+zwei_f <- subgraph.edges(foerder_b1, E(foerder_b1)[year >= 2010 & year <= 2014])
+V(zwei_f)$degree <- degree(zwei_f)
+
+f2_nl <- igraph::as_data_frame(zwei_f, "vertices" )
+f2_el <- igraph::as_data_frame(zwei_f, "edges" )
+
+# Die Top3 Degrees
+f2_nl |> 
+  filter(type == 5 | type == 6) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+#Dritte halbe Dekade
+
+drei_f <- subgraph.edges(foerder_b1, E(foerder_b1)[year >= 2015 & year <= 2019])
+V(drei_f)$degree <- degree(drei_f)
+
+f3_nl <- igraph::as_data_frame(drei_f, "vertices" )
+f3_el <- igraph::as_data_frame(drei_f, "edges" )
+
+# Die Top3 Degrees
+f3_nl |> 
+  filter(type == 5 | type == 6) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+# Vierte halbe Dekade
+
+vier_f <- subgraph.edges(foerder_b1, E(foerder_b1)[year >= 2020 & year <= 2022])
+V(vier_f)$degree <- degree(vier_f)
+
+f4_nl <- igraph::as_data_frame(vier_f, "vertices" )
+f4_el <- igraph::as_data_frame(vier_f, "edges" )
+
+# Die Top3 Degrees
+f4_nl |> 
+  filter(type == 5 | type == 6) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+```
+
+
+Top Preise nach DBP-Gewinner: Welche Preise waren für die Gewinnerinnen und Gewinner des DBP wichtig? 
+
+Auch bei den Gewinnerinnen und Gewinnern des Deutschen Buchpreises liegt der Ingeborg-Bachmann-Preis wieder auf Platz 1. Danach folgen weitere (Förder-)preise bzw. Stipendien, allesamt mit dem Degree-Wert 4, wovon alle bereits unter den Top3 der Teilnetzwerke "Förderpreise/Stipendien" bzw. "Preise" oder zumindest unter den Top-Kandidaten innerhalb einer definierten Dekade vertreten sind.
+
+Heruntergebrochen auf die Gewinnerinnen und Gewinner, bestätigt dies die Tendenz, dass diese Preise bzw. Förderpreise/Stipendien in starker Wechselbeziehung zum Deutschen Buchpreis stehen. Trotzdem kann nicht bestätigt werden, dass diese Preise die Nominierung bzw. den Gewinn des Deutschen Buchpreis begünstigen, da nicht ersichtlich ist, ob sie davor vor oder danach gewonnen wurden. 
+
+```{r Wichtigste Preise und Förderpreise und Stipendien für Buchpreis-Gewinner, echo=TRUE, fig.height=10, fig.width=15}
+
+#Wir verwenden wieder das Netzwerk mit den Siegen anderer Preise (realtion = 2).
+
+#Wir löschen alle Autor*innen, die nur auf der Shortlist standen
+
+V(bpn)$label <- V(bpn)$name
+
+gewinner_preise <- delete_vertices(siege, V(siege)[type == "4"])
+gewinner_preise1 <- delete_vertices(gewinner_preise, V(gewinner_preise)[type == "7"])
+gewinner_preise2 <- delete_vertices(gewinner_preise1, V(gewinner_preise1)[type == "3"])
+
+# Wir berechnen die Degree der Preise und Förderpreise
+
+V(gewinner_preise2)$degree <- degree(gewinner_preise2)
+
+gpreise_nl <- igraph::as_data_frame(gewinner_preise2, "vertices" )
+gpreise_el <- igraph::as_data_frame(gewinner_preise2, "edges" )
+
+gpreise_nl |> 
+  filter(type == 5 | type == 6 | type == 2) %>% 
+  select(name, degree, type) |> 
+  slice_max(degree, n=3)
+
+# Für die Visualisierung löschen wir alle Preise mit Degree 0 und Degree 1 raus. 
+
+wpg <- delete_vertices(gewinner_preise2, V(gewinner_preise2)[degree == "0"])
+wpg1 <- delete_vertices(wpg, V(wpg)[degree == "1"])
+
+
+
+V(wpg1)[V(wpg1)$type== 5]$color <- "red"        # Förderpreise
+V(wpg1)[V(wpg1)$type== 6]$color <- "red"        # Stipendien
+V(wpg1)[V(wpg1)$type== 2]$color <- "red"        #Preise
+V(wpg1)[V(wpg1)$type== 8]$color <- "green"   # Autor*innen Gewinner
+
+
+plot(wpg1,
+     asp=0,
+     layout=layout_with_kk,
+     vertex.size = degree(wpg1),
+     rescale=TRUE,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Die Preise und Förderpreise der Gewinner*innen",
+     sub="Alle Jahre")
+
+
+```
+
+
+### Teilnetzwerk der Gewinnerbücher
+
+Welches Buch hat die meisten Preise abgeräumt?
+
+Mit dem Degree-Wert 5 hat das Buch "Herkunft" von Saša Stanišić die meisten anderen Preise neben dem Deutschen Buchpreis 2019 gewonnen.
+
+Außerdem fällt auf, dass "Blutbuch" von Kim de l'Horizon auch unter den Top-Büchern mit dem Degree-Wert 4 liegt. Obwohl das Buch erst vor einem Jahr erschienen und mit dem Deutschen Buchpreis ausgezeichnet wurde, hat es schon mehrere Preise, darunter auch den Schweizer Buchpreis 2022, abgeräumt.
+
+```{r Degree Gewinnerbücher Vorbereitung, include=FALSE}
+
+# Wir erstellen ein Teilnetzwerk für die Gewinnerbücher
+
+gb <- delete_vertices(bp, V(bp)[type == "3"]) 
+
+dgb <- degree(gb,mode="all")
+
+V(gb)$degree <- degree(gb)
+
+gewinner_nl <- igraph::as_data_frame(gb, "vertices" )
+gewinner_el <- igraph::as_data_frame(gb, "edges" )
+
+
+gewinner_nl
+gewinner_el
+
+```
+
+```{r Degree Gewinnerbücher, echo=TRUE}
+# Die Top3 Degrees
+gewinner_nl |> 
+  filter(type == 7) %>% 
+  select(name, degree) |> 
+  slice_max(degree, n=3)
+
+```
+
+
+
+
+
+### Ego Netzwerke: Besondere Beispiele für den Matthäus-Effekt 
+
+Wir wollen Egonetzwerke von interessanten Autoren und Autorinnen erstellen und Edges nach Jahren einfärben, um zu sehen, welche Preise vor und nach dem Deutschen Buchpreis gewonnen wurden. Wir nehmen die drei Autoren und Autorinnen mit dem höchsten Degree-Wert (am erfolgreichsten) Herta Müller, Marion Poschmann und Robert Menasse.
+
+Das Egonetzwerk von Marion Poschmann
+
+Marion Poschmann war bereits zweimal für den Deutschen Buchpreis nominiert, hat ihn allerdings noch nie gewonnen. Am meisten Preise hat sie vor ihrer ersten Nominierung 2013 für das Buch "Sonnenposition" gewonnen. Darunter sind z. B. das Villa-Massimo-Stipendium und das Stipendium des Deutschen Literaturfonds (sogar zweimal), die, wie wir herausgefunden haben, zu den Top3 Stipendien unter Autorinnen und Autoren auf der Shortlist zählen. In ihrem Fall könnte man also davon ausgehen, dass einige dieser Preise ausschlaggebend für ihre Nominierung waren, der Matthäus-Effekt also greift. Auffällig ist die Flaute in dem Zeitraum zwischen ihrer ersten und ihrer zweiten Nominierung, also zwischen 2013 und 2017. In dieser Zeit hat sie keine weiteren Preise oder Stipendien gewonnen.
+
+```{r Egonetzwerk Marion Poschmann, echo=FALSE, fig.height=5, fig.width=10}
+
+edges <- read.csv("https://raw.githubusercontent.com/CI017/Projekt-Buchpreis/main/FINAL%20-%20Edgelist.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/CI017/Projekt-Buchpreis/main/FINAL%20-%20Nodelist.csv", header=T, as.is=T, sep = ",")
+edgematrix <-as.matrix(edges)
+
+bp <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+
+
+queen2_h <- make_ego_graph(bp, order = 1, nodes = V(bp)$name == "Marion Poschmann", mode
+="all")
+
+queen2 <- queen2_h[[1]]    
+queen2
+
+# Marion Poschmann war 2013 mit Sonnenposition und 2017 mit Kieferninseln für den Deutschen Buchpreis nominiert
+
+E(queen2)[E(queen2)$year < 2013]$color <- "red" # Jahre vor 2013 sind rot
+E(queen2)[E(queen2)$year == 2013]$color <- "green" # Gewinne 2013 sind grün
+E(queen2)[E(queen2)$year > 2013 & year < 2017]$color <- "pink" # Jahre 2013 bis 2017
+E(queen2)[E(queen2)$year == 2017]$color <- "yellow" # Gewinne 2017 sind gelb
+E(queen2)[E(queen2)$year > 2017]$color <- "blue" # Jahre nach 2017 sind blau
+
+plot(queen2,
+     asp=0,
+     layout=layout_with_kk,
+     vertex.size = 2,
+     rescale=TRUE,
+     edge.arrow.size=.2,
+     main="Ego-Netzwerk Marion Poschmann",
+     sub="Preise vor und nach 2017")
+
+```
+
+
+Das Egonetzwerk von Robert Menasse
+
+Auch Robert Menasse konnte die meisten Auszeichnungen vor dem Jahr 2017 verbuchen, in dem er den Deutschen Buchpreis für "Die Hauptstadt" gewonnen hat. Er hat außerdem mindestens zwei Preise außerhalb des deutschsprachigen Raums gewonnen: den Prix littéraire des lycées francais d'Europe und den 21st Century Best Foreign Novel of the Year Award.
+
+```{r Egonetzwerk Robert Menasse, echo=FALSE, fig.height=5, fig.width=10}
+
+edges <- read.csv("https://raw.githubusercontent.com/CI017/Projekt-Buchpreis/main/FINAL%20-%20Edgelist.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/CI017/Projekt-Buchpreis/main/FINAL%20-%20Nodelist.csv", header=T, as.is=T, sep = ",")
+edgematrix <-as.matrix(edges)
+
+bp <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+
+
+king_h <- make_ego_graph(bp, order = 1, nodes = V(bp)$name == "Robert Menasse", mode
+="all")
+
+king <- king_h[[1]]    
+king
+
+# Robert Menasse 2017 mit Die Hauptstadt gewonnen
+
+E(king)[E(king)$year < 2017]$color <- "red" # Jahre vor 2017 sind rot
+E(king)[E(king)$year == 2017]$color <- "green" # Gewinne 2017 sind grün
+E(king)[E(king)$year > 2017]$color <- "blue" # Jahre nach 2017 sind blau
+
+plot(king,
+     asp=0,
+     layout=layout_with_kk,
+     vertex.size = 2,
+     rescale=TRUE,
+     edge.arrow.size=.2,
+     main="Ego-Netzwerk Robert Menasse",
+     sub="Preise vor und nach 2017")
+
+```
+
+
+Das Egonetzwerk von Herta Müller
+
+Herta Müller hat unter den Nominierten die meisten Preise gewonnen und damit den höchsten Degree-Wert. Interessant ist, dass sie den Deutschen Buchpreis nicht erhalten hat. Aus dem Ego-Netzwerk lässt sich herauslesen, welche Preise vor der Nominierung und welche Preise nach der Nominierung von Herta Müller gewonnen wurden. Besonders interessant ist, dass Herta Müller im gleichen Jahr der Nominierung auch den Literaturnobelpreis erhalten hat. Der Literaturnobelpreis zählt als "höchste literarische Weihe" (Irsigler & Lembke, 2014). In diesem Jahr gab es wegen Herta Müller eine Medienresonanz zur Shortlist des Deutschen Buchpreises wie in keinem anderen Jahr, da im Zusammenhang mit dem Literaturnobelpreis immer auch der Deutsche Buchpreis genannt wurde (ebd.). Im Anschluss an die Nominierung zum Deutschen Buchpreis hat Herta Müller deutlich weniger Preise gewonnen, wie die blauen Verbindungen zeigen. 
+
+```{r Egonetzwerk Herta Müller, echo=FALSE, fig.height=5, fig.width=10}
+
+edges <- read.csv("https://raw.githubusercontent.com/CI017/Projekt-Buchpreis/main/FINAL%20-%20Edgelist.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/CI017/Projekt-Buchpreis/main/FINAL%20-%20Nodelist.csv", header=T, as.is=T, sep = ",")
+edgematrix <-as.matrix(edges)
+
+bp <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+
+
+queen1 <- make_ego_graph(bp, order = 1, nodes = V(bp)$name == "Herta Mueller", mode="all")
+
+queen <- queen1[[1]]
+queen
+
+# Herta Müller war 2009 mit Atemschaukel nominiert
+
+E(queen)[E(queen)$year < 2009]$color <- "red" # Jahre vor 2009 sind rot
+E(queen)[E(queen)$year == 2009]$color <- "green" # Gewinne 2009 sind grün
+E(queen)[E(queen)$year > 2009]$color <- "blue" # Jahre nach 2009 sind blau
+
+plot(queen,
+     asp=0,
+     layout=layout_with_kk,
+     vertex.size = 2,
+     rescale=TRUE,
+     edge.arrow.size=.2,
+     main="Ego-Netzwerk Herta Müller",
+     sub="Preise vor und nach 2009")
+
+```
+
+
+# Diskussion
+
+## Fazit 
+
+Ergebnisse zu unseren Arbeitshypothesen
+
+a) Es gibt bestimmte Preise die ausschlaggebend für die Nominierung des Deutschen Buchpreises sind.
+
+Die Top3-Preise des Buchpreis-Netzwerks sind der Ingeborg-Bachmann-Preis, der aspekte-Literaturpreis und der Wilhelm-Raabe-Literaturpreis. Das bedeutet, diese Preise werden am häufigsten von den Autorinnen und Autoren gewonnen, die zwischen 2005 und 2022 auf der Shortlist des Deutschen Buchpreis standen. Das gilt unabhängig davon, ob sie nur nominiert waren oder auch gewonnen haben. Es lässt sich daraus schließen, dass diese Preise eine besondere Bedeutung in der Wechselwirkung mit dem Deutschen Buchpreis innehaben. 
+
+Dasselbe gilt für die Förderpreise bzw. Stipendien. In dem Teilnetzwerk stechen das Villa-Massimo-Stipendium, die Stadtschreiber von Bergen	und das Arbeitsstipendium des Deutschen Literaturfonds heraus.
+
+Durch das Gewinner-Netzwerk, das nur die wichtigsten Preise der Buchpreis-Gewinnerinnen und -Gewinner darstellt, wird dieser Eindruck verstärkt. Auch dort tauchen alle Top-Preise und Stipendien auf - auf Platz 1 wieder der Ingeborg-Bachmann-Preis. 
+
+Dennoch kann aus diesen Ergebnissen nicht geschlussfolgert werden, dass der Gewinn einer dieser Preise zur Nominierung für den Deutschen Buchpreis führt, da nicht ersichtlich ist, ob diese Preise davor oder danach gewonnen wurden.
+
+
+b) Gewinnerinnen und Gewinner des Deutschen Buchpreises gewinnen danach besonders häufig den Schweizer Buchpreis
+
+Da der Schweizer Buchpreis nicht unter den Top-Preisen auftaucht und anderen Preisen offenbar größere Bedeutung zukommt, wurde diese Hypothese nicht weiter verfolgt. 
+
+c) Gewinnerinnen und Gewinner des Deutschen Buchpreises haben vorher Preis XY gewonnen
+
+siehe a) 
+
+d) Gewinnerinnen und Gewinner des Deutschen Buchpreises haben danach Preis XY gewonnen
+
+siehe a)
+
+
+e) Der Autor oder die Autorin mit den meisten Preisen wurde auch mit dem Deutschen Buchpreis ausgezeichnet
+
+Nein, tatsächlich wurde Herta Müller, die Autorin des Netzwerks, die die meisten Preise gewonnen hat, noch nie mit dem Deutschen Buchpreis ausgezeichnet. Bisher stand sie einmal auf der Shortlist, im Jahr 2009 mit ihrem Buch "Atemschaukel". Dagegen hat sie bereits den Literaturnobelpreis gewonnen. 
+
+Unter den Top3-Autorinnen und Autoren hat lediglich Robert Menasse auch den Deutschen Buchpreis gewonnen. Auffällig ist zudem, dass die Hidden Stars generell ausschließlich Frauen sind. Neben Herta Müller zählen dazu Marion Poschmann (ebenfalls Top3-Allstars) und Friederike Mayorecker.
+
+
+f) Nach der Nominierung bzw. der Vergabe des Deutschen Buchpreises lässt sich ein Matthäus-Effekt erkennen
+
+Der Matthäus-Effekt lässt sich zumindest nicht pauschal auf die Autorinnen und Autoren des Deutschen Buchpreis übertragen. Bei den drei Egonetzwerken von Herta Müller, Robert Menasse und Marion Poschmann fällt aber auf, dass sie die meisten Preise vor ihrer ersten Nominierung bzw. dem Gewinn abgeräumt haben. In den Fällen von Herta Müller und Marion Poschmann sind die Anzahl der Jahre vor und nach ihren Nominierung ansatzweise vergleichbar und beide haben im Anschluss daran deutlich weniger andere Preise gewonnen. Das lässt die Vermutung zu, dass eine Nominierung zum Deutschen Buchpreis das große Finale für die Autorinnen und Autoren beschreibt. Besonders das Egonetzwerk von Herta Müller zeigt jedoch, dass man den Deutschen Buchpreis nicht zwingend gewinnt, weil man vorher viele andere Preise gewonnen hat. "Wer hat, der wird demnach zumindest für den Deutschen Buchpreis nominiert."
+
+Zudem lässt sich im Hinblick auf die Verlage der Matthäus-Effekt vermuten. Obwohl insgesamt Bücher von über 100 Verlagen beim Deutschen Buchpreis eingereicht werden, sind der Suhrkamp Verlag, der Carl Hanser Verlag und der Kiepenheuer & Witsch Verlag über die Jahre immer unter den Top3 Verlagen mit den meisten nominierten Büchern. Besonders der Suhrkamp Verlag sticht hervor, da er als einziger Verlag bereits mit mehr als zwei Büchern den Deutschen Buchpreis gewonnen hat. Dies kann auf das hohe ökonomische Kapital zurückzuführen sein, das diese Verlage unter anderem durch die großen Presseabteilungen dazu befähigt sind, viel Geld in die Vermarktung und Kampagne der Bücher zu stecken. Da spielt in die Aufmerksamkeitsökonomie als gesetztes Ziel des Deutschen Buchpreis und zieht wiederum mehr Aufmerksamkeit auf diese Verlage. Kleiner Verlagen fehlen dagegen die Mittel und die entsperchende Professionalisierung.
+
+
+## Neue Erkenntnisse
+
+g) Bedeutung der Preise
+
+Die Zahl der im deutschsprachigen Raum verliehenen Preise hat über die Jahrzehnte stark zugenommen. So waren es 1993 lediglich 500 Literaturpreise (Schreiber, 1993) und im Jahr 2010 bereits insgesamt 6000 (Schmidt, 2010 ). Trotz dieser Masse an Preisen, die die Autorinnen und Autoren möglicherweise gewinnen können, verdichtet sich unser Datensatz auf einige wenige Preise, denen im Zusammenhang mit dem Buchpreis offenbar eine größere Bedeutung zukommt. 
+
+Der Ingeborg-Bachmann-Preis fällt in dieser Erhebung besonders auf. Viele Autorinnen und Autoren, die auf der Shortlist standen, wurden ebennfalls mit diesem Preis ausgezeichnet. Dies lässt sich darauf zurückführen, das der Ingeborg-Bachmann-Preis dem Deutschen Buchpreis in seiner Form und Funktion sehr ähnlich ist. Dagegen taucht der Georg-Büchner-Preis, als dritter großer, konkurrierender Literaturpreis nicht unter den Top-Preisen in der Erhebung auf. Der Georg-Büchner-Preis belegt eine andere kulturökonimische Nische in der Literaturbranche und kommt dem Deutschen Buchpreis daher nicht in die Quere (Irsigler & Lembke, 2014 ).
+
+
+
+## Limitationen
+
+a) Vergleichbarkeit
+
+Die Ergebnisse sind nur bedingt vergleichbar, da die Autorinnen und Autoren je nach Alter und Jahr, in dem sie für den Deutschen Buchpreis nominiert waren bzw. ihn gewonnen haben, unterschiedlich viel Zeit davor und danach hatten, um weitere Preise zu gewinnen. Daher haben einige Autorinnen und Autoren sowie Preise automatisch einen höheren Degree-Wert.
+
+
+b) Longlist
+
+Um unser Forschungsfeld einzugrenzen und den Datensatz übersichtlich zu halten, wurden nur die Bücher (samt entsprechender Node- und Edgeattribute) der Shortlist des Deutschen Buchpreis erhoben, also die sechs Finalisten, die nach dem Auswahlverfahren noch übrig bleiben. Die Longlist mit insgesamt 20 Titeln wurde bewusst nicht berücksichtigt.
+
+
+c) Zeitliche Zuordnung der Preise
+
+Aus dem Datensatz wird nicht ersichtlich, ob die Autorinnen und Autoren ihre anderen Preise gewonnen haben, bevor oder nachdem sie auf der Shortlist des Deutschen Buchpreis standen. Daher sind Aussagen darüber limitiert, welche Preise besonder ausschlaggebend für die entsprechende Nominierung sind bzw. mit welchen Preise sie danach tendenziell augezeichnet werden. Diese Merkmale hätten in der Edge-List erhoben werden können, was allerdings mit einem noch höheren Zeit- und Ressourcenaufwand verbunden gewesen wäre. Aus diesem Grund wurde dies lediglich exemplarisch in den Ego-Netzwerken dargestellt.
+
+
+
+
+## Ausblick
+
+a) Der Deutsche Buchpreis versteht sich als Förderinstrument. Damit stärkt er das Marketingpotenzial durch größere Buchverkäufe und eine starke mediale Resonanz (Irsigler & Lembke, 2014). Ausgehend davon könnte man die Relevanz des Deutschen Buchpreises für die Aktuere der Literaturbranache in den Fokus rücken und beispielsweise die Absatzzahlen der Bücher nach ihrer Nominierung beleuchten.
+
+b) Anschließend an dieses Forschungsprojekt könnte tiefergehend untersucht werden, warum bestimmte Verlage über die Jahre der Verleihung hinweg immer eine Vormachtstellung bei den nominierten Büchern innehatten, obwohl von viel mehr Verlagen etwas eingereicht wird.
+
+c) Genauso ist interessant, warum einige Preise unter den Autorinnen und Autoren des Deutschen Buchpreises häufiger vertreten sind als andere. Sind es Preise, die generell eine wichtige Rolle in der Literaturbranche spielen oder sind sie tatsächlich explizit für den Deutschen Buchpreis relevant. Außerdem können mit weiterer Recherche die verschiedenen Verbindungen von Preisen und Verlagen zu wichtigen Akteuren der Buchbranche untersucht werden. So wird das Arbeitsstipendium des Deutschen Literaturfonds durch den Börsenverein des Deutschen Buchhandels gefördert. Das Stipendium taucht unter den Top3 der wichtigen Stipendien/Förderpreisen unter den Autorinnen und Autoren auf der Shortlist auf. Der Börsenverein widerum hat den Deutschen Buchpreis erst ins Leben gerufen.
+
+d) Um herauszufinden, welche Preise besonders vor bzw. nach der Nominierung zum Deutschen Buchpreis eine Rolle spielen, könnte dies in einer neuen Datenerhebung berücksichtigt werden (s. Limitationen) und so genauere Rückschlüsse für deren Bedeutsamkeit zulassen.
+
+
+
+
+# Anlage 
+## Literatur
+
+Die Buch-Macher. (2010) Cicero. https://www.cicero.de/kultur/die-buch-macher/41226
+
+Die Stadtschreiber von Bergen-Enkheim. (o. D.). https://frankfurt.de/themen/kultur/literatur/stadtschreiber-von-bergen-enkheim/stadtschreiber-von-bergen-enkheim 
+
+Deutscher Literaturfonds. (o. D.). https://deutscher-literaturfonds.de/
+
+Glanz, B. & Seifert, N. (2019, 22. Dezember) Wenn es unterhaltsam wird, sind die Frauen dran. SPIEGEL. https://www.spiegel.de/kultur/literatur/vorschauenzaehlen-anteil-von-autorinnen-in-den-fruehjahrsprogrammen-a-1301975.html
+
+Fuhse, J.A. (2018). Soziale Netzwerke. KOnzepte und Forschungsmethoden. utb. 
+
+Lembke, G. & Irsigler, I. (2014). Spiel, Satz und Sieg. 10 Jahre Deutscher Buchpreis. Berlin University Press.
+
+Schmidt, C. (2010, 4. Oktober). Es geht uns gut. Süddeutsche Zeitung. https://www.sueddeutsche.de/kultur/deutscher-buchpreis-es-geht-uns-gut-1.1007837
+
+
+Schreiber, P. (1993). Preisflut in dürren Dichterzeiten. FOCUS Magazin. https://www.focus.de/reisen/service/preisflut-in-duerren-dichterzeiten-literaturpreise_id_1820588.html 
+
+Vlasta, S. (2016). Aufmerksamkeit und Macht im literarischen Feld - der Deutsche Buchpreis. http://old.ff.ujep.cz/ab/index.php/de/jahrgang-10-2016
+
+
+## Codebuch
+
+### EDGE-Attribute
+EDGE-Attribute
+
+*id*
+Entspricht der ID in der Nodelist. Keine Sonderzeichen. Kleinbuchstaben.
+
+*from*
+Knoten 1 der Beziehung
+
+*to*
+Knoten 2 der Beziehung
+
+*relation*
+Beziehungsart zwischen den Autor*innen, Büchern, Verlagen und Preisen; ungerichtet
+1 = nominiert
+2 = gewonnen
+3 = veröffentlicht
+4 = Deutschen Buchpreis gewonnen
+
+*year*
+Jahr der Shortlist
+Jahr des Sieges
+Jahr der Veröffentlichung durch den Verlag
+
+### NODE-Attribute
+
+*id*
+Identische ID wie aus der Edgelist zur Identifikation der Knoten.
+
+Bücher: Schlagwort aus dem Titel, auf Dopplungen achten
+Autor*innen: Zwei erste Buchstaben des Vor- und Nachnamen
+Verlage: Name ausschreiben (z.B. piper), bzw. gängiger Name (Carl Hanser = hanser), bei Doppelnamen erster Name ausgeschrieben (z.B.: Kiepenheuer und Witsch = kiepenheuer)
+Preise: Kürzel -> Literaturpreis = p, Buchpreis = bp, ansonsten die Anfangsbuchstaben der enthaltenen Wörter (z. B. Literaturpreis der Jürgen-Ponto-Stiftung = pjps, Robert-Gernhard-Preis = rgp)
+
+*name*
+numerische ID
+
+*type*
+1= Verlag
+2 = Preis
+3 = Buch Shortlist
+4 = Autor*in
+5 = Förderpreis (inkl. Stadtschreiber) 
+6 = Stipendium 
+7 = Buch Gewinner
+8 = Autor*in Gewinner
+
+*sex*
+1 = weiblich
+2 = männlich
+3 = divers
+
+*year*
+Jahr, in dem das Buch auf der Shortlist des Deutschen Buchpreises stand
+Jahr, in dem ein Preis gewonnen wurden
+Jahr, in dem der Autor den Deutschen Buchpreis gewonnen hat
+
+*genre*
+Familienroman
+Reiseroman
+Historischer Roman
+Gesellschaftsroman
+Liebesroman
+Komödie
+Entwicklungsroman
+Science-Fiction
+Fantasy
+Krimi
+Thriller
+Horror
+Epos
+Theaterroman
+Abenteuerroman
+
+
+*thema*
+"gesellschaftliches/politisches Thema, dass mit Buch/Autor zusammenhängt, z. B.:"
+Feminismus
+Rassismus
+Familie
+Kommunismus
+Identität
+Migration
+Ostblock-Diktatur
+Traumabewältigung
+Deutsch-französische Geschichte
+
+## Wichtig
+Das Netzwerk ist ungerichtet.
+
+Uns interessieren andere Literaturpreise nur, wenn der Autor bzw. das Buch diesen Preis gewonnen hat. Nominierungen sind irrelevant, genau wie andere Buchtitel des Autors, die nicht auf der Shortlist des Deutschen
+
+# Beispiele:
+
+1. Autor A gewinnt den Deutschen Buchpreis mit Buch B im Jahr X.
+"A,B,2,X"
+
+2. Autor A gewinnt für Buch B noch Preis P in Jahr J
+"from,to,relation,year"
+"B,P,2,J"
+
+3. Autor A gewinnt für anderes Buch C dein Preis R in Jahr Y (das Buch C taucht NICHT auf)
+"from,to,relation,year"
+"A,R,2,Y"
+
+*Unsere Kanten*
+
+Autor -> Buch (Shortlist)
+Autor -> Buchpreis anderes Buch
+Buch (Shortlist) -> Verlag
+Buch (Shortlist) -> anderer Buchpreis
+Autor -> andere Buchpreis, auch wenn es ein Shortlist- oder Gewinnerbuch ist
+
+## Datenmaterial und Skript
+
+## Team, Arbeitsaufwand und Lessons Learned 
+
+### Teammitglieder
+
+Stefanie Binder (sb296)
+Canan Edemir (ce059)
+Celine Imensek (ci017)
+Allegra Knobloch (ak337)
+Lina Krauß (lk202)
+
+### Arbeitsaufwand und Rollen im Team 
+
+Bei der Themenfindung, der Recherche, der Codierung und der Datenerhebung haben wir im Gesamtteam gearbeitet. Dazu gehörten regelmäßige Update-Meetings. 
+
+Wir haben dann ein Team für den Code aus Celine Imensek und Lina Krauß gebildet. Sie waren für die Berechnung und Ausarbeitung in R zuständig. 
+
+Das zweite Team aus Stefanie Binder, Canan Edemir und Allegra Knobloch war für Ausarbeitung der Ergebnisse zuständig. Für die Präsentation, den Forschungsbericht inklusive Beschriftung und Interpretation der Chunks sowie der Literaturrecherche und den Artikel für das edit-Magazin.
+
+Arbeitsaufwand pro Peron
+
+Stefanie Binder: 71 Stunden
+Canan Edemir: 70 Stunden
+Celine Imensek: 74 Stunden
+Allegra Knobloch: 70 Stunden
+Lina Krauß: 75 Stunden
+
+
+
+### Lessons learned
+
+Wir haben  bereits bei der Themenfindung auf die Tipps der vorherigen Semester geachtet und ein Thema mit einem übersichtlichen Datenzugang gewählt. Für die Erhebung haben wir die einzelnen Jahre in Paketen untereinander aufgeteilt. Die Herausforderung bei der Datenerhebung war, die unterschiedlichen Preise zu sichten und zu entscheiden, was als Literaturpreis zählt und was nicht. Auch die unterschiedliche Bezeichnung oder eine Namensänderung im Laufe der Jahre von Preisen war eine Herausforderung. Bei einem Meeting mit allen Teammitgliedern haben wir diese Unklarheiten beseitigen können. Wichtig für uns war außerdem unser Ziel und unsere Forschungsfrage bei allen Teil-Schritten im Blick zu behalten. 
+
+Wir haben gelernt, dass regelmäßige Treffen als gesamtes Team wichtig sind, um sich gegenseitig auf dem aktuellsten Stand zu halten. 
